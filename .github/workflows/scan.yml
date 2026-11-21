@@ -24,9 +24,8 @@ jobs:
         with:
           # The scanner's native dependency (isolated-vm) builds on Node 22.
           node-version: '22'
-      - name: Install the scanner
-        run: npm install -g @n8n/scan-community-package
       - name: Scan
+        # The scanner's dependencies only install with pnpm (only-allow pnpm).
         env:
           VERSION: ${{ github.event.inputs.version || github.event.workflow_run.head_branch }}
-        run: scan-community-package "n8n-nodes-post-upload@${VERSION}"
+        run: npx -y pnpm@10 dlx @n8n/scan-community-package "n8n-nodes-post-upload@${VERSION}"
