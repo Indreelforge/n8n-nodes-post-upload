@@ -607,7 +607,9 @@ export class PostUpload implements INodeType {
 						const details = (error as NodeApiError & { postUploadBody?: IDataObject }).postUploadBody;
 						if (details) Object.assign(json, details, { error: (error as Error).message });
 					}
-					returnData.push({ json, pairedItem: { item: i } });
+					// Attach the error to the item so "On Error → Continue (using error output)"
+					// routes it to the error branch; the JSON keeps the API's details.
+					returnData.push({ json, error: toNodeError(this.getNode(), error, i), pairedItem: { item: i } });
 				} else {
 					throw toNodeError(this.getNode(), error, i);
 				}
