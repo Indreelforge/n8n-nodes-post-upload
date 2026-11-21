@@ -4,7 +4,7 @@
 - Package author contact is now n8n@post-upload.com. No code changes.
 
 ## 1.3.2
-- With **On Error → Continue (using error output)**, API errors (for example a platform that isn't connected) now go to the error output instead of the success output. The item still carries `error`, `error_code` and `http_code`.
+- With **On Error → Continue (using error output)**, API errors (for example a platform that isn't connected) now go to the error output instead of the success output, with the API's message in `error`. With **Continue (regular output)** the item also keeps `error_code` and `http_code`.
 
 ## 1.3.1
 - Built and published with the n8n node CLI from GitHub Actions, with npm provenance.
