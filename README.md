@@ -72,6 +72,16 @@ Upload operations take a **Platform Options** list of name/value pairs that are 
 
 Tested with n8n 2.x. Requires a Post-Upload account with an API key.
 
+## Development
+
+```bash
+npm ci
+npm run lint
+npm test        # builds, then runs the tests in test/ (no network)
+```
+
+`test/operations.test.cjs` holds the API contract of every operation (method, path, fields); adding an operation without a contract row fails the suite. CI runs lint, build and tests on every push, and the publish workflow runs the tests before anything reaches npm.
+
 ## Docs
 
 Full API reference: [docs.post-upload.com](https://docs.post-upload.com)

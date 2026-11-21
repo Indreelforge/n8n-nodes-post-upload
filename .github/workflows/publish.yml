@@ -86,6 +86,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test
+        # 101 tests: the API contract of every operation, error routing, the
+        # trigger lifecycle and signature checks. A failure stops the publish.
+        run: npm test
+
+      - name: Version matches the tag
+        run: test "v$(node -p "require('./package.json').version")" = "v${GITHUB_REF_NAME}"
+
       - name: Release
         # Publishes to npm with a provenance attestation (requires id-token: write above).
         # Lint and build run automatically as part of the release process.
