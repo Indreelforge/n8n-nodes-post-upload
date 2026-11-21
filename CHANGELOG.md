@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.3
+- Package author contact is now n8n@post-upload.com. No code changes.
+
 ## 1.3.2
 - With **On Error → Continue (using error output)**, API errors (for example a platform that isn't connected) now go to the error output instead of the success output. The item still carries `error`, `error_code` and `http_code`.
 

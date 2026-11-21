@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-post-upload",
-	"version": "1.3.2",
+	"version": "1.3.3",
 	"description": "n8n community node for Post-Upload: publish videos, photos and text to 16 social networks in one step, then schedule, track and analyse your posts.",
 	"license": "MIT",
 	"homepage": "https://docs.post-upload.com/guides/n8n",
@@ -22,7 +22,7 @@
 	],
 	"author": {
 		"name": "Post-Upload",
-		"email": "support@post-upload.com"
+		"email": "n8n@post-upload.com"
 	},
 	"repository": {
 		"type": "git",
