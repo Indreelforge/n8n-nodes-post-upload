@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0
+- 76 actions (from 15): new Queue, Platform, Account, Webhook, Whitelabel and Video Tool resources; more Post, Schedule, Analytics and Profile operations (retry, calendar, live stats, top posts, connect links, credential and Bluesky connections, whitelabel links, …).
+- New **Post-Upload Trigger** node: instant workflows on upload completed, partially failed, failed and scheduled post published, using a webhook subscription with its own signing secret (verified on every request).
+- Existing operations and parameters are unchanged, so current workflows keep working.
+
 ## 1.3.3
 - Package author contact is now n8n@post-upload.com. No code changes.
 

@@ -30,15 +30,23 @@ Create a Post-Upload account at [post-upload.com](https://post-upload.com), then
 
 ## Available actions
 
-| Resource | Operation |
+76 actions in one **Post-Upload** node, plus the **Post-Upload Trigger**:
+
+| Resource | Operations |
 |----------|-----------|
-| Upload | Upload a Video (URL or binary) |
-| Upload | Upload Photos (1–10, URLs or binary) |
-| Upload | Post Text |
-| Post | Get Upload Status · Get Upload History · Delete Upload |
-| Schedule | List · Cancel · Edit Scheduled Post |
-| Analytics | Get Overview · Get Profile Analytics |
-| Profile | List · Get · Create · Delete Profile |
+| Upload | Upload a Video (URL or binary) · Upload Photos (1–10, URLs or binary) · Post Text |
+| Post | Get Upload Status · Get Upload History · Get Upload · Retry Failed Upload · Delete Upload |
+| Schedule | List · Edit · Cancel Scheduled Post · Get Calendar Month · Get Calendar Stats |
+| Queue | Get Settings · Update Settings · Get Next Slot · Preview Slots · Mark Slot Full · Unmark Slot Full |
+| Analytics | Overview · Profile · Live Platform Stats · Post · Upload Counts · Top Posts · Platform Performance · Views · Activity · YouTube Stats |
+| Profile | List · Get · Create · Delete · Get Connected Accounts · Get Connect Link · Connect Webhook or Bot Platform · Connect Bluesky · Disconnect Platform · Sync Connections · Get TikTok Creator Info · Create / Revoke Whitelabel Link |
+| Platform | List Facebook Pages · List Google Business Locations · List LinkedIn Pages · List / Create Pinterest Boards · List Recent Media · List Reddit Posts · Get Supported Metrics |
+| Account | Get · Get Platform Limits · Get X Allowance · Get YouTube Allowance · Get System Status |
+| Webhook | Get / Set Account Webhook · List Deliveries · Rotate Secret · Send Test Event · List / Get / Create / Delete Subscriptions · Send Test Event to Subscription |
+| Whitelabel | Generate Connect Link · Validate Connect Link |
+| Video Tool | Convert · Resize · Trim · Add Watermark · Run FFmpeg Command · Get Job · List Jobs · Download Output · Get Usage |
+
+**Post-Upload Trigger** starts a workflow on `upload.completed`, `upload.partial`, `upload.failed` or `scheduled_post_published` (optionally for one profile). When the workflow is activated it creates its own webhook subscription with its own signing secret, checks `X-Post-Upload-Signature` on every request, and removes the subscription when the workflow is deactivated. Webhooks need the Post-Upload Advanced plan or higher, and n8n must be reachable over public https.
 
 Every upload takes a **Title / Caption** and an optional **Description**. YouTube uses them as the video title and description; the other networks post the title, a blank line, then the description.
 
@@ -56,7 +64,9 @@ Upload operations take a **Platform Options** list of name/value pairs that are 
 
 **Schedule a video for later and check it went out.** Post-Upload: *Upload → Upload a Video* with Additional Options → Schedule At → Wait (until the scheduled time) → Post-Upload: *Post → Get Upload Status* with `{{ $('Post-Upload').item.json.data.upload_id }}`.
 
-**Use it as an AI agent tool.** The node is usable as a tool, so an AI Agent node can call Post-Upload to publish or schedule posts.
+**Alert on failed posts.** Post-Upload Trigger (event: Upload Failed) → Slack or Post-Upload *Post Text* with the `platform_errors` of the event.
+
+**Use it as an AI agent tool.** The node is usable as a tool, so an AI Agent node can call Post-Upload to publish or schedule posts. On self-hosted n8n set `N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=true`.
 
 ## Compatibility
 

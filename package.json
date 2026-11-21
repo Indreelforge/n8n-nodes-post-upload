@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-post-upload",
-	"version": "1.3.3",
+	"version": "1.4.0",
 	"description": "n8n community node for Post-Upload: publish videos, photos and text to 16 social networks in one step, then schedule, track and analyse your posts.",
 	"license": "MIT",
 	"homepage": "https://docs.post-upload.com/guides/n8n",
@@ -50,7 +50,8 @@
 			"dist/credentials/PostUploadApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/PostUpload/PostUpload.node.js"
+			"dist/nodes/PostUpload/PostUpload.node.js",
+			"dist/nodes/PostUploadTrigger/PostUploadTrigger.node.js"
 		]
 	},
 	"devDependencies": {
