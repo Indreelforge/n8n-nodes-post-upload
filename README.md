@@ -1,0 +1,71 @@
+# n8n-nodes-post-upload
+
+Official [Post-Upload](https://post-upload.com) community node for n8n. Publish videos, photos and text to **16 social networks** from a single node, then schedule, track and analyse your posts. No per-platform credentials needed.
+
+## Supported platforms
+
+Instagram · YouTube · TikTok · Facebook · X (Twitter) · LinkedIn · Threads · Pinterest · Reddit · Bluesky · Google Business Profile · Discord · Telegram · Slack · Mastodon · WordPress
+
+Discord, Telegram, Slack, Mastodon and WordPress are connected once in the Post-Upload dashboard (webhook URL, bot token, access token or application password) — see https://docs.post-upload.com/platform-guides/discord and the other platform guides.
+
+## Installation
+
+In n8n: **Settings → Community Nodes → Install** → enter `n8n-nodes-post-upload`
+
+Or via npm:
+
+```bash
+npm install n8n-nodes-post-upload
+```
+
+## Credentials
+
+The node uses one credential type, **Post-Upload API**: an API key and the API base URL (default `https://api.post-upload.com`). n8n tests it against `GET /api/profiles` when you save it.
+
+Create a Post-Upload account at [post-upload.com](https://post-upload.com), then:
+
+1. Enable 2FA on your account
+2. Go to **Dashboard → API Keys → New Key**
+3. In n8n, add a new **Post-Upload API** credential and paste your key
+
+## Available actions
+
+| Resource | Operation |
+|----------|-----------|
+| Upload | Upload a Video (URL or binary) |
+| Upload | Upload Photos (1–10, URLs or binary) |
+| Upload | Post Text |
+| Post | Get Upload Status · Get Upload History · Delete Upload |
+| Schedule | List · Cancel · Edit Scheduled Post |
+| Analytics | Get Overview · Get Profile Analytics |
+| Profile | List · Get · Create · Delete Profile |
+
+Every upload takes a **Title / Caption** and an optional **Description**. YouTube uses them as the video title and description; the other networks post the title, a blank line, then the description.
+
+The **Platforms** list only offers the networks that accept the chosen content type (for example, Slack and Reddit are text-only, and YouTube is video-only).
+
+When the API rejects a request, the node shows the API's own message and `error_code` (for example "Too many photos: 11…"). With **Continue On Fail**, the item carries `error`, `error_code` and `http_code`.
+
+Upload operations take a **Platform Options** list of name/value pairs that are sent as form fields — use it for platform-specific settings such as `privacy_level` (required for TikTok), `pinterest_board_id` (Pinterest), `reddit_subreddit` (Reddit) or `youtube_privacy`.
+
+## Example workflows
+
+**Post a new YouTube video to every network.** RSS Feed Trigger (your channel feed) → Post-Upload: *Upload → Post Text*, Platforms: X, LinkedIn, Threads, Bluesky, Title: `New video: {{ $json.title }} {{ $json.link }}`.
+
+**Publish a photo carousel from Google Drive.** Google Drive Trigger → Google Drive (Download) → Post-Upload: *Upload → Upload Photos*, Photo Source: Binary Data, Platforms: Instagram, Facebook, Pinterest (add the `pinterest_board_id` platform option).
+
+**Schedule a video for later and check it went out.** Post-Upload: *Upload → Upload a Video* with Additional Options → Schedule At → Wait (until the scheduled time) → Post-Upload: *Post → Get Upload Status* with `{{ $('Post-Upload').item.json.data.upload_id }}`.
+
+**Use it as an AI agent tool.** The node is usable as a tool, so an AI Agent node can call Post-Upload to publish or schedule posts.
+
+## Compatibility
+
+Tested with n8n 2.x. Requires a Post-Upload account with an API key.
+
+## Docs
+
+Full API reference: [docs.post-upload.com](https://docs.post-upload.com)
+
+## License
+
+MIT
