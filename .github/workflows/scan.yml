@@ -28,4 +28,10 @@ jobs:
         # The scanner's dependencies only install with pnpm (only-allow pnpm).
         env:
           VERSION: ${{ github.event.inputs.version || github.event.workflow_run.head_branch }}
-        run: npx -y pnpm@10 dlx @n8n/scan-community-package "n8n-nodes-post-upload@${VERSION}"
+        run: |
+          # The registry can take a minute to serve a just-published version.
+          for i in $(seq 1 30); do
+            [ "$(npm view "n8n-nodes-post-upload@${VERSION}" version 2>/dev/null)" = "${VERSION}" ] && break
+            echo "waiting for n8n-nodes-post-upload@${VERSION} on npm…"; sleep 10
+          done
+          npx -y pnpm@10 dlx @n8n/scan-community-package "n8n-nodes-post-upload@${VERSION}"
