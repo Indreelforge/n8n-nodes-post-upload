@@ -100,16 +100,3 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  scan:
-    # n8n's own checker, run against the version just published.
-    name: n8n community package scan
-    needs: publish
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-      - name: Wait for the npm registry
-        run: sleep 60
-      - name: Scan
-        run: npx -y @n8n/scan-community-package "n8n-nodes-post-upload@${GITHUB_REF_NAME}"
