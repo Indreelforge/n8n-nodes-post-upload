@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { allOperations, run, bodyKeys } = require('./helpers.cjs');
+const { allOperations, run, bodyKeys, props } = require('./helpers.cjs');
 
 // The API contract of every operation: method, path, and the query/body
 // fields it must send (with the sample values from helpers.cjs).
@@ -118,17 +118,47 @@ test('path parameters are URL-encoded', async () => {
 	assert.equal(requests[0].url, 'https://api.test/api/profiles/my%20brand%2F1');
 });
 
-test('Telegram, Mastodon and WordPress send their own credential fields', async () => {
+test('credential platforms send their own credential fields', async () => {
 	const cases = {
 		telegram: [{ botToken: 't', chatId: '-100' }, ['bot_token', 'chat_id']],
 		mastodon: [{ instanceUrl: 'https://m.test', accessToken: 'a' }, ['instance_url', 'access_token']],
 		wordpress: [{ siteUrl: 'https://w.test', wpUsername: 'u', wpAppPassword: 'p' }, ['site_url', 'username', 'app_password']],
+		devto: [{ devtoApiKey: 'k' }, ['api_key']],
+		hashnode: [{ hashnodeAccessToken: 't', hashnodePublicationId: 'pub' }, ['access_token', 'publication_id']],
+		lemmy: [{ lemmyInstanceUrl: 'https://l.test', lemmyUsername: 'u', lemmyPassword: 'p', lemmyCommunity: 'tech' }, ['instance_url', 'username', 'password', 'community']],
+		listmonk: [{ listmonkUrl: 'https://lm.test', listmonkApiUser: 'u', listmonkApiToken: 't', listmonkListIds: '1, 4' }, ['base_url', 'api_user', 'api_token', 'list_ids']],
+		nostr: [{ nostrPrivateKey: 'nsec1x' }, ['nsec']],
+		whop: [{ whopApiKey: 'k', whopExperienceId: 'exp_1' }, ['api_key', 'experience_id']],
 	};
 	for (const [platform, [values, fields]] of Object.entries(cases)) {
 		const { requests } = await run('profile', 'connectCredentials', { overrides: { credentialPlatform: platform, ...values } });
 		assert.equal(requests[0].url, `https://api.test/api/profiles/brand/connect/${platform}/credentials`);
 		assert.deepEqual(Object.keys(requests[0].body).sort(), fields.sort());
 	}
+});
+
+test('optional credential fields are sent only when set', async () => {
+	const cases = {
+		devto: [{ devtoApiKey: 'k', devtoOptions: { base_url: 'https://forem.test' } }, { api_key: 'k', base_url: 'https://forem.test' }],
+		lemmy: [{ lemmyInstanceUrl: 'https://l.test', lemmyUsername: 'u', lemmyPassword: 'p', lemmyCommunity: 'tech', lemmyOptions: { totp: '123456' } }, { instance_url: 'https://l.test', username: 'u', password: 'p', community: 'tech', totp: '123456' }],
+		nostr: [{ nostrPrivateKey: 'nsec1x', nostrOptions: { relays: 'wss://r.test' } }, { nsec: 'nsec1x', relays: 'wss://r.test' }],
+		whop: [{ whopApiKey: 'k', whopDestination: 'chat', whopChannelId: 'chan_1' }, { api_key: 'k', channel_id: 'chan_1' }],
+	};
+	for (const [platform, [values, body]] of Object.entries(cases)) {
+		const { requests } = await run('profile', 'connectCredentials', { overrides: { credentialPlatform: platform, ...values } });
+		assert.deepEqual(requests[0].body, body, platform);
+	}
+});
+
+test('platform pickers offer the 22 networks by content type', () => {
+	const pick = (op) => props.find((p) => p.name === 'platforms' && p.displayOptions?.show?.operation?.includes(op) && p.displayOptions.show.resource?.includes('upload')).options.map((o) => o.value);
+	const all = new Set([...pick('video'), ...pick('photos'), ...pick('text')]);
+	assert.equal(all.size, 22);
+	for (const p of ['devto', 'hashnode', 'lemmy', 'listmonk', 'nostr', 'whop']) assert.ok(pick('text').includes(p), `${p} accepts text`);
+	for (const p of ['hashnode', 'lemmy', 'listmonk', 'nostr', 'whop']) assert.ok(pick('photos').includes(p), `${p} accepts photos`);
+	assert.ok(pick('video').includes('whop') && !pick('video').includes('devto'));
+	const credential = props.find((p) => p.name === 'credentialPlatform').options.map((o) => o.value);
+	assert.equal(credential.length, 11);
 });
 
 test('uploads: binary sources are sent as files, options as form fields', async () => {

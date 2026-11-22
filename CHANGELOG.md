@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0
+- Six new networks (16 → 22): **Dev.to**, **Hashnode**, **Lemmy**, **Nostr**, **Whop** and **Listmonk**, in every platform list (upload pickers filtered by content type, disconnect, analytics and platform filters).
+- **Profile → Connect Webhook or Bot Platform** connects the six new networks with their own fields (API key, access token and publication ID, instance login and community, private key and relays, forum or chat ID, Listmonk API user and list IDs). Secrets are masked.
+- Title, Description and Platform Options help now cover the new networks (Dev.to, Hashnode, Lemmy and Listmonk need a title; `devto_tags`, `devto_published`, `hashnode_subtitle`, `lemmy_url`, `lemmy_nsfw`, `listmonk_draft`, …).
+- Existing operations and parameters are unchanged, so current workflows keep working.
+
 ## 1.4.0
 - 76 actions (from 15): new Queue, Platform, Account, Webhook, Whitelabel and Video Tool resources; more Post, Schedule, Analytics and Profile operations (retry, calendar, live stats, top posts, connect links, credential and Bluesky connections, whitelabel links, …).
 - New **Post-Upload Trigger** node: instant workflows on upload completed, partially failed, failed and scheduled post published, using a webhook subscription with its own signing secret (verified on every request).

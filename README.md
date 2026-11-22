@@ -1,12 +1,12 @@
 # n8n-nodes-post-upload
 
-Official [Post-Upload](https://post-upload.com) community node for n8n. Publish videos, photos and text to **16 social networks** from a single node, then schedule, track and analyse your posts. No per-platform credentials needed.
+Official [Post-Upload](https://post-upload.com) community node for n8n. Publish videos, photos and text to **22 social networks** from a single node, then schedule, track and analyse your posts. No per-platform credentials needed.
 
 ## Supported platforms
 
-Instagram · YouTube · TikTok · Facebook · X (Twitter) · LinkedIn · Threads · Pinterest · Reddit · Bluesky · Google Business Profile · Discord · Telegram · Slack · Mastodon · WordPress
+Instagram · YouTube · TikTok · Facebook · X (Twitter) · LinkedIn · Threads · Pinterest · Reddit · Bluesky · Google Business Profile · Discord · Telegram · Slack · Mastodon · WordPress · Dev.to · Hashnode · Lemmy · Nostr · Whop · Listmonk
 
-Discord, Telegram, Slack, Mastodon and WordPress are connected once in the Post-Upload dashboard (webhook URL, bot token, access token or application password) — see https://docs.post-upload.com/platform-guides/discord and the other platform guides.
+Discord, Telegram, Slack, Mastodon, WordPress, Dev.to, Hashnode, Lemmy, Nostr, Whop and Listmonk are connected once in the Post-Upload dashboard, or from n8n with *Profile → Connect Webhook or Bot Platform* (webhook URL, bot token, access token, API key, password or private key) — see https://docs.post-upload.com/platform-guides/discord and the other platform guides.
 
 ## Installation
 
@@ -50,11 +50,13 @@ Create a Post-Upload account at [post-upload.com](https://post-upload.com), then
 
 Every upload takes a **Title / Caption** and an optional **Description**. YouTube uses them as the video title and description; the other networks post the title, a blank line, then the description.
 
-The **Platforms** list only offers the networks that accept the chosen content type (for example, Slack and Reddit are text-only, and YouTube is video-only).
+The **Platforms** list only offers the networks that accept the chosen content type (for example, Slack, Reddit and Dev.to are text-only, and YouTube is video-only).
+
+Dev.to, Hashnode, Lemmy and Listmonk need a title: the **Title / Caption** is the article title (Dev.to, Hashnode), the post title (Lemmy) or the email subject (Listmonk), and the **Description** is the Markdown body.
 
 When the API rejects a request, the node shows the API's own message and `error_code` (for example "Too many photos: 11…"). With **Continue On Fail**, the item carries `error`, `error_code` and `http_code`.
 
-Upload operations take a **Platform Options** list of name/value pairs that are sent as form fields — use it for platform-specific settings such as `privacy_level` (required for TikTok), `pinterest_board_id` (Pinterest), `reddit_subreddit` (Reddit) or `youtube_privacy`.
+Upload operations take a **Platform Options** list of name/value pairs that are sent as form fields — use it for platform-specific settings such as `privacy_level` (required for TikTok), `pinterest_board_id` (Pinterest), `reddit_subreddit` (Reddit), `youtube_privacy`, `devto_tags` / `devto_published` (Dev.to), `hashnode_subtitle` (Hashnode), `lemmy_url` / `lemmy_nsfw` (Lemmy) or `listmonk_draft` (Listmonk).
 
 ## Example workflows
 

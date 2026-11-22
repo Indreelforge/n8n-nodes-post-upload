@@ -34,7 +34,7 @@ test('earlier parameter names are kept, so existing workflows keep working', () 
 });
 
 test('secrets typed into the node are masked', () => {
-	for (const n of ['webhookUrl', 'botToken', 'accessToken', 'wpAppPassword', 'blueskyAppPassword', 'linkToken']) {
+	for (const n of ['webhookUrl', 'botToken', 'accessToken', 'wpAppPassword', 'blueskyAppPassword', 'linkToken', 'devtoApiKey', 'hashnodeAccessToken', 'lemmyPassword', 'listmonkApiToken', 'nostrPrivateKey', 'whopApiKey']) {
 		const p = props.find((x) => x.name === n);
 		assert.equal(p.typeOptions && p.typeOptions.password, true, n);
 	}

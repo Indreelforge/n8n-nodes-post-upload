@@ -69,7 +69,7 @@ const fields: INodeProperties[] = [
 		typeOptions: { rows: 3 },
 		default: '',
 		required: true,
-		description: 'The post text. It is the video title on YouTube and the caption everywhere else; with a Description, most networks post "Title, blank line, Description".',
+		description: 'The post text. It is the video title on YouTube, the article title on Dev.to and Hashnode, the post title on Lemmy, the email subject on Listmonk and the caption everywhere else; with a Description, most networks post "Title, blank line, Description".',
 		displayOptions: show(UPLOAD_OPS),
 	},
 	{
@@ -78,7 +78,7 @@ const fields: INodeProperties[] = [
 		type: 'string',
 		typeOptions: { rows: 5 },
 		default: '',
-		description: 'Optional longer text: the YouTube video description, and added below the title on the other networks. Leave empty to post the title only.',
+		description: 'Optional longer text: the YouTube video description, the article or email body (Markdown) on Dev.to, Hashnode, Lemmy and Listmonk, and added below the title on the other networks. Leave empty to post the title only.',
 		displayOptions: show(UPLOAD_OPS),
 	},
 	{
@@ -200,7 +200,7 @@ const fields: INodeProperties[] = [
 		typeOptions: { multipleValues: true },
 		placeholder: 'Add Platform Option',
 		default: {},
-		description: 'Platform-specific form fields sent as-is, e.g. privacy_level (required for TikTok), pinterest_board_id (required for Pinterest), reddit_subreddit (required for Reddit), youtube_privacy, youtube_tags, target_linkedin_page_id. Full list: https://docs.post-upload.com/platform-guides/tiktok and the other platform guides.',
+		description: 'Platform-specific form fields sent as-is, e.g. privacy_level (required for TikTok), pinterest_board_id (required for Pinterest), reddit_subreddit (required for Reddit), youtube_privacy, youtube_tags, target_linkedin_page_id, devto_tags, devto_published, hashnode_subtitle, hashnode_tags, lemmy_url, lemmy_nsfw, listmonk_draft. Full list: https://docs.post-upload.com/platform-guides/tiktok and the other platform guides.',
 		displayOptions: show(UPLOAD_OPS),
 		options: [
 			{
@@ -213,7 +213,7 @@ const fields: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: 'privacy_level',
-						description: 'API field name, e.g. privacy_level, pinterest_board_id, reddit_subreddit, youtube_privacy',
+						description: 'API field name, e.g. privacy_level, pinterest_board_id, reddit_subreddit, youtube_privacy, devto_tags, hashnode_subtitle, lemmy_url, listmonk_draft',
 					},
 					{
 						displayName: 'Value',

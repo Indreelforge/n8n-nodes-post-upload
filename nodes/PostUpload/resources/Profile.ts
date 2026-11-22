@@ -3,7 +3,7 @@ import type { ResourceModule } from '../GenericFunctions';
 import { apiRequest, compact, enc, OAUTH_PLATFORMS, PLATFORMS, platformOptions, showFor } from '../GenericFunctions';
 
 const NAMED_OPS = ['get', 'create', 'delete', 'connectedAccounts', 'disconnect', 'connectLink', 'connectCredentials', 'connectBluesky', 'syncConnections', 'tiktokCreatorInfo', 'createWhitelabelLink', 'revokeWhitelabelLink'];
-const CREDENTIAL_PLATFORMS = ['discord', 'mastodon', 'slack', 'telegram', 'wordpress'];
+const CREDENTIAL_PLATFORMS = ['devto', 'discord', 'hashnode', 'lemmy', 'listmonk', 'mastodon', 'nostr', 'slack', 'telegram', 'whop', 'wordpress'];
 const credShow = (platform: string[]) => ({ show: { resource: ['profile'], operation: ['connectCredentials'], credentialPlatform: platform } });
 
 const operations: INodeProperties[] = [
@@ -15,7 +15,7 @@ const operations: INodeProperties[] = [
 		displayOptions: { show: { resource: ['profile'] } },
 		options: [
 			{ name: 'Connect Bluesky', value: 'connectBluesky', description: 'Connect a Bluesky account with an app password', action: 'Connect bluesky' },
-			{ name: 'Connect Webhook or Bot Platform', value: 'connectCredentials', description: 'Connect Discord, Slack, Telegram, Mastodon or WordPress with their webhook, token or app password', action: 'Connect a webhook or bot platform' },
+			{ name: 'Connect Webhook or Bot Platform', value: 'connectCredentials', description: 'Connect Discord, Slack, Telegram, Mastodon, WordPress, Dev.to, Hashnode, Lemmy, Nostr, Whop or Listmonk with their webhook, token, API key, password or private key', action: 'Connect a webhook or bot platform' },
 			{ name: 'Create', value: 'create', description: 'Create a new profile', action: 'Create a profile' },
 			{ name: 'Create Whitelabel Link', value: 'createWhitelabelLink', description: 'Create a branded link your client opens to connect their own accounts', action: 'Create a whitelabel link' },
 			{ name: 'Delete', value: 'delete', description: 'Delete a profile by name', action: 'Delete a profile' },
@@ -168,6 +168,220 @@ const fields: INodeProperties[] = [
 		displayOptions: credShow(['wordpress']),
 	},
 	{
+		displayName: 'API Key',
+		name: 'devtoApiKey',
+		type: 'string',
+		typeOptions: { password: true },
+		default: '',
+		required: true,
+		description: 'Dev.to → Settings → Extensions → DEV Community API Keys → Generate API Key',
+		displayOptions: credShow(['devto']),
+	},
+	{
+		displayName: 'Options',
+		name: 'devtoOptions',
+		type: 'collection',
+		placeholder: 'Add Option',
+		default: {},
+		displayOptions: credShow(['devto']),
+		options: [
+			{
+				displayName: 'Forem Site URL',
+				name: 'base_url',
+				type: 'string',
+				default: '',
+				placeholder: 'https://dev.to',
+				description: 'Only for a Forem community other than dev.to',
+			},
+		],
+	},
+	{
+		displayName: 'Personal Access Token',
+		name: 'hashnodeAccessToken',
+		type: 'string',
+		typeOptions: { password: true },
+		default: '',
+		required: true,
+		description: 'Hashnode → Account settings → Developer → Generate new token',
+		displayOptions: credShow(['hashnode']),
+	},
+	{
+		displayName: 'Publication ID',
+		name: 'hashnodePublicationId',
+		type: 'string',
+		default: '',
+		required: true,
+		placeholder: '64a1b2c3d4e5f6a7b8c9d0e1',
+		description: 'From your blog dashboard URL: hashnode.com/PUBLICATION_ID/dashboard. The publication must be on Hashnode Pro.',
+		displayOptions: credShow(['hashnode']),
+	},
+	{
+		displayName: 'Instance URL',
+		name: 'lemmyInstanceUrl',
+		type: 'string',
+		default: '',
+		required: true,
+		placeholder: 'https://lemmy.world',
+		displayOptions: credShow(['lemmy']),
+	},
+	{
+		displayName: 'Username or Email',
+		name: 'lemmyUsername',
+		type: 'string',
+		default: '',
+		required: true,
+		description: 'The account Post-Upload posts as (a dedicated bot account is recommended)',
+		displayOptions: credShow(['lemmy']),
+	},
+	{
+		displayName: 'Password',
+		name: 'lemmyPassword',
+		type: 'string',
+		typeOptions: { password: true },
+		default: '',
+		required: true,
+		displayOptions: credShow(['lemmy']),
+	},
+	{
+		displayName: 'Community',
+		name: 'lemmyCommunity',
+		type: 'string',
+		default: '',
+		required: true,
+		placeholder: 'technology or technology@lemmy.world',
+		description: 'Community name, or name@instance for a community on another server',
+		displayOptions: credShow(['lemmy']),
+	},
+	{
+		displayName: 'Options',
+		name: 'lemmyOptions',
+		type: 'collection',
+		placeholder: 'Add Option',
+		default: {},
+		displayOptions: credShow(['lemmy']),
+		options: [
+			{
+				displayName: '2FA Code',
+				name: 'totp',
+				type: 'string',
+				default: '',
+				description: 'Only if the account uses two-factor authentication. Used once to sign in and not stored.',
+			},
+		],
+	},
+	{
+		displayName: 'Listmonk URL',
+		name: 'listmonkUrl',
+		type: 'string',
+		default: '',
+		required: true,
+		placeholder: 'https://lists.example.com',
+		displayOptions: credShow(['listmonk']),
+	},
+	{
+		displayName: 'API User',
+		name: 'listmonkApiUser',
+		type: 'string',
+		default: '',
+		required: true,
+		description: 'Listmonk → Admin → Users → New, type API (needs campaigns:manage, campaigns:send, lists:get_all and media:manage)',
+		displayOptions: credShow(['listmonk']),
+	},
+	{
+		displayName: 'API Token',
+		name: 'listmonkApiToken',
+		type: 'string',
+		typeOptions: { password: true },
+		default: '',
+		required: true,
+		displayOptions: credShow(['listmonk']),
+	},
+	{
+		displayName: 'List IDs',
+		name: 'listmonkListIds',
+		type: 'string',
+		default: '',
+		required: true,
+		placeholder: '1, 4',
+		description: 'Numeric IDs of the lists each campaign is sent to, comma-separated',
+		displayOptions: credShow(['listmonk']),
+	},
+	{
+		displayName: 'Private Key (Nsec)',
+		name: 'nostrPrivateKey',
+		type: 'string',
+		typeOptions: { password: true },
+		default: '',
+		required: true,
+		placeholder: 'nsec1…',
+		description: 'Your nsec… key (or 64-character hex). Stored encrypted; a Nostr key cannot be revoked, so consider a dedicated key.',
+		displayOptions: credShow(['nostr']),
+	},
+	{
+		displayName: 'Options',
+		name: 'nostrOptions',
+		type: 'collection',
+		placeholder: 'Add Option',
+		default: {},
+		displayOptions: credShow(['nostr']),
+		options: [
+			{
+				displayName: 'Blossom Media Server',
+				name: 'blossom_server',
+				type: 'string',
+				default: '',
+				placeholder: 'https://blossom.primal.net',
+				description: 'Where photos are uploaded (default: blossom.primal.net)',
+			},
+			{
+				displayName: 'Relays',
+				name: 'relays',
+				type: 'string',
+				default: '',
+				placeholder: 'wss://relay.damus.io, wss://nos.lol',
+				description: 'Comma-separated wss:// relays (default: relay.damus.io, nos.lol and relay.primal.net)',
+			},
+		],
+	},
+	{
+		displayName: 'API Key',
+		name: 'whopApiKey',
+		type: 'string',
+		typeOptions: { password: true },
+		default: '',
+		required: true,
+		description: 'Whop dashboard → Developer → API keys (forum post create, chat message create and file create permissions)',
+		displayOptions: credShow(['whop']),
+	},
+	{
+		displayName: 'Post In',
+		name: 'whopDestination',
+		type: 'options',
+		options: [
+			{ name: 'Chat Channel', value: 'chat' },
+			{ name: 'Forum', value: 'forum' },
+		],
+		default: 'forum',
+		displayOptions: credShow(['whop']),
+	},
+	{
+		displayName: 'Forum Experience ID',
+		name: 'whopExperienceId',
+		type: 'string',
+		default: '',
+		required: true,
+		placeholder: 'exp_XXXXXXXXXXXX',
+		displayOptions: { show: { resource: ['profile'], operation: ['connectCredentials'], credentialPlatform: ['whop'], whopDestination: ['forum'] } },
+	},
+	{
+		displayName: 'Chat Channel ID',
+		name: 'whopChannelId',
+		type: 'string',
+		default: '',
+		required: true,
+		displayOptions: { show: { resource: ['profile'], operation: ['connectCredentials'], credentialPlatform: ['whop'], whopDestination: ['chat'] } },
+	},
+	{
 		displayName: 'Handle',
 		name: 'blueskyHandle',
 		type: 'string',
@@ -291,10 +505,19 @@ export const profile: ResourceModule = {
 		async connectCredentials(i, base) {
 			const platform = this.getNodeParameter('credentialPlatform', i) as string;
 			const get = (name: string) => this.getNodeParameter(name, i) as string;
+			const opts = (name: string) => this.getNodeParameter(name, i, {}) as IDataObject;
+			const whopTarget = () =>
+				this.getNodeParameter('whopDestination', i) === 'chat' ? { channel_id: get('whopChannelId') } : { experience_id: get('whopExperienceId') };
 			const body: IDataObject =
 				platform === 'telegram' ? { bot_token: get('botToken'), chat_id: get('chatId') }
 				: platform === 'mastodon' ? { instance_url: get('instanceUrl'), access_token: get('accessToken') }
 				: platform === 'wordpress' ? { site_url: get('siteUrl'), username: get('wpUsername'), app_password: get('wpAppPassword') }
+				: platform === 'devto' ? compact({ api_key: get('devtoApiKey'), base_url: opts('devtoOptions').base_url })
+				: platform === 'hashnode' ? { access_token: get('hashnodeAccessToken'), publication_id: get('hashnodePublicationId') }
+				: platform === 'lemmy' ? compact({ instance_url: get('lemmyInstanceUrl'), username: get('lemmyUsername'), password: get('lemmyPassword'), community: get('lemmyCommunity'), totp: opts('lemmyOptions').totp })
+				: platform === 'listmonk' ? { base_url: get('listmonkUrl'), api_user: get('listmonkApiUser'), api_token: get('listmonkApiToken'), list_ids: get('listmonkListIds') }
+				: platform === 'nostr' ? compact({ nsec: get('nostrPrivateKey'), relays: opts('nostrOptions').relays, blossom_server: opts('nostrOptions').blossom_server })
+				: platform === 'whop' ? { api_key: get('whopApiKey'), ...whopTarget() }
 				: { webhook_url: get('webhookUrl') };
 			return apiRequest.call(this, i, { method: 'POST', url: `${profilePath(base, this.getNodeParameter('profile', i))}/connect/${enc(platform)}/credentials`, body });
 		},

@@ -14,25 +14,31 @@ import { NodeApiError, NodeOperationError } from 'n8n-workflow';
 
 // What each platform can publish — mirrors `content` in shared/platforms.json
 // so the picker only offers platforms that accept the chosen content type.
-export const VIDEO_PLATFORMS = ['bluesky', 'discord', 'facebook', 'instagram', 'linkedin', 'mastodon', 'pinterest', 'telegram', 'threads', 'tiktok', 'wordpress', 'x', 'youtube'];
-export const PHOTO_PLATFORMS = ['bluesky', 'discord', 'facebook', 'google_business', 'instagram', 'linkedin', 'mastodon', 'pinterest', 'telegram', 'threads', 'tiktok', 'wordpress', 'x'];
-export const TEXT_PLATFORMS = ['bluesky', 'discord', 'facebook', 'google_business', 'linkedin', 'mastodon', 'reddit', 'slack', 'telegram', 'threads', 'wordpress', 'x'];
+export const VIDEO_PLATFORMS = ['bluesky', 'discord', 'facebook', 'instagram', 'linkedin', 'mastodon', 'pinterest', 'telegram', 'threads', 'tiktok', 'whop', 'wordpress', 'x', 'youtube'];
+export const PHOTO_PLATFORMS = ['bluesky', 'discord', 'facebook', 'google_business', 'hashnode', 'instagram', 'lemmy', 'linkedin', 'listmonk', 'mastodon', 'nostr', 'pinterest', 'telegram', 'threads', 'tiktok', 'whop', 'wordpress', 'x'];
+export const TEXT_PLATFORMS = ['bluesky', 'devto', 'discord', 'facebook', 'google_business', 'hashnode', 'lemmy', 'linkedin', 'listmonk', 'mastodon', 'nostr', 'reddit', 'slack', 'telegram', 'threads', 'whop', 'wordpress', 'x'];
 export const OAUTH_PLATFORMS = ['facebook', 'google_business', 'instagram', 'linkedin', 'pinterest', 'reddit', 'threads', 'tiktok', 'x', 'youtube'];
 
 export const PLATFORMS = [
 	{ name: 'Bluesky', value: 'bluesky' },
+	{ name: 'Dev.to', value: 'devto' },
 	{ name: 'Discord', value: 'discord' },
 	{ name: 'Facebook', value: 'facebook' },
 	{ name: 'Google Business Profile', value: 'google_business' },
+	{ name: 'Hashnode', value: 'hashnode' },
 	{ name: 'Instagram', value: 'instagram' },
+	{ name: 'Lemmy', value: 'lemmy' },
 	{ name: 'LinkedIn', value: 'linkedin' },
+	{ name: 'Listmonk', value: 'listmonk' },
 	{ name: 'Mastodon', value: 'mastodon' },
+	{ name: 'Nostr', value: 'nostr' },
 	{ name: 'Pinterest', value: 'pinterest' },
 	{ name: 'Reddit', value: 'reddit' },
 	{ name: 'Slack', value: 'slack' },
 	{ name: 'Telegram', value: 'telegram' },
 	{ name: 'Threads', value: 'threads' },
 	{ name: 'TikTok', value: 'tiktok' },
+	{ name: 'Whop', value: 'whop' },
 	{ name: 'WordPress', value: 'wordpress' },
 	{ name: 'X (Twitter)', value: 'x' },
 	{ name: 'YouTube', value: 'youtube' },

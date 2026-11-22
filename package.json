@@ -1,7 +1,7 @@
 {
 	"name": "n8n-nodes-post-upload",
-	"version": "1.4.0",
-	"description": "n8n community node for Post-Upload: publish videos, photos and text to 16 social networks in one step, then schedule, track and analyse your posts.",
+	"version": "1.5.0",
+	"description": "n8n community node for Post-Upload: publish videos, photos and text to 22 social networks in one step, then schedule, track and analyse your posts.",
 	"license": "MIT",
 	"homepage": "https://docs.post-upload.com/guides/n8n",
 	"keywords": [
@@ -18,6 +18,12 @@
 		"slack",
 		"mastodon",
 		"wordpress",
+		"devto",
+		"hashnode",
+		"lemmy",
+		"nostr",
+		"whop",
+		"listmonk",
 		"automation"
 	],
 	"author": {

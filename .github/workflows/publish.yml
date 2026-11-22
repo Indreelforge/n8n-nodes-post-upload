@@ -87,7 +87,7 @@ jobs:
         run: npm ci
 
       - name: Test
-        # 101 tests: the API contract of every operation, error routing, the
+        # The tests: the API contract of every operation, error routing, the
         # trigger lifecycle and signature checks. A failure stops the publish.
         run: npm test
 

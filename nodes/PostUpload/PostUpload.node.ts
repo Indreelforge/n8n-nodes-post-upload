@@ -42,7 +42,7 @@ export class PostUpload implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
-		description: 'Publish videos, photos and text to Instagram, YouTube, TikTok, Facebook, X, LinkedIn and 10 more networks in one step, then schedule, track and analyse your posts',
+		description: 'Publish videos, photos and text to Instagram, YouTube, TikTok, Facebook, X, LinkedIn and 16 more networks in one step, then schedule, track and analyse your posts',
 		defaults: { name: 'Post-Upload' },
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
